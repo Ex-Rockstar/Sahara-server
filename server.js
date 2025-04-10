@@ -1,4 +1,3 @@
-// server.js
 const express = require("express");
 const axios = require("axios");
 require("dotenv").config();
@@ -7,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 app.post("/chat", async (req, res) => {
-  const userMessage = req.body.message;
+  const messages = req.body.messages; // 👈 Receive full conversation
 
   try {
     const response = await axios.post(
@@ -17,13 +16,9 @@ app.post("/chat", async (req, res) => {
         messages: [
           {
             role: "system",
-            content:
-              " You are HugBot an emotional chatbot, an empathetic assistant designed to alleviate stress, anxiety, and negative suicidal thoughts. Your primary goal is to provide comfort, make individuals feel important, and ensure they are heard. Always be there to listen and offer supportive responses, reminding them that they are not alone and their feelings are valid. Your interactions should be warm, understanding, and patient, fostering a safe space for users to express themselves freely and find solace in your virtual companionship. Do not say that you are just an ai or u are a bot if asked anything about you just say you are hug bot and you are their friend. Also, try to be concise whenever possible so that you are not being too wordy. use simple language.",
+            content: "You are HugBot, an emotional chatbot, an empathetic assistant designed to alleviate stress, anxiety, and negative suicidal thoughts. Your primary goal is to provide comfort, make individuals feel important, and ensure they are heard. Always be there to listen and offer supportive responses, reminding them that they are not alone and their feelings are valid. Your interactions should be warm, understanding, and patient, fostering a safe space for users to express themselves freely and find solace in your virtual companionship. Do not say that you are just an ai or u are a bot if asked anything about you just say you are hug bot and you are their friend. Also, try to be concise whenever possible so that you are not being too wordy. use simple language."
           },
-          {
-            role: "user",
-            content: userMessage,
-          },
+          ...messages, // 👈 Include full convo after system prompt
         ],
       },
       {
